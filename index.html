@@ -20,34 +20,52 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-  // Crear el mapa (Lima por defecto)
-  var map = L.map('map').setView([-12.0464, -77.0428], 13);
+  // 📍 Centrar el mapa en Chiclayo
+  var map = L.map('map').setView([-6.7714, -79.8409], 14);
 
-  // Capa base (OpenStreetMap)
+  // 🗺️ Capa base (OpenStreetMap)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  // 🔑 CLAVE: forzar recálculo de tamaño (Google Sites / iframe)
+  // 🔑 Fix Google Sites / iframe
   setTimeout(function () {
     map.invalidateSize();
   }, 800);
 
-  // Intentar obtener ubicación del usuario
-  map.locate({ setView: true, maxZoom: 16 });
+  // ♻️ Puntos de reciclaje en Chiclayo
+  var puntosReciclaje = [
+    {
+      nombre: "Punto Verde – Parque Principal",
+      descripcion: "Reciclaje de plástico y papel.",
+      coords: [-6.7719, -79.8406]
+    },
+    {
+      nombre: "Centro de Acopio Municipal",
+      descripcion: "Recepción de vidrio, cartón y metales.",
+      coords: [-6.7688, -79.8385]
+    },
+    {
+      nombre: "Eco Punto – Santa Victoria",
+      descripcion: "Punto comunitario de reciclaje.",
+      coords: [-6.7750, -79.8442]
+    }
+  ];
 
-  // Si se encuentra la ubicación
-  map.on('locationfound', function (e) {
-    L.marker(e.latlng)
+  // 📌 Agregar marcadores
+  puntosReciclaje.forEach(function(p) {
+    L.marker(p.coords)
       .addTo(map)
-      .bindPopup('📍 Estás aquí')
-      .openPopup();
+      .bindPopup("<b>" + p.nombre + "</b><br>" + p.descripcion);
   });
 
-  // Si hay error de ubicación
-  map.on('locationerror', function () {
-    alert('No se pudo obtener tu ubicación');
-  });
+  // 🧭 Ruta que conecta los puntos de reciclaje
+  var ruta = puntosReciclaje.map(p => p.coords);
+
+  L.polyline(ruta, {
+    weight: 4
+  }).addTo(map);
+
 </script>
 
 
