@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Mapa Leaflet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS (CDN) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+</head>
+
+<body>
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS (CDN) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Crear el mapa (Lima por defecto)
+    var map = L.map('map').setView([-12.0464, -77.0428], 13);
+
+    // Capa base (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Intentar obtener ubicación del usuario
+    map.locate({ setView: true, maxZoom: 16 });
+
+    // Si se encuentra la ubicación
+    map.on('locationfound', function (e) {
+      L.marker(e.latlng)
+        .addTo(map)
+        .bindPopup('📍 Estás aquí')
+        .openPopup();
+    });
+
+    // Si hay error de ubicación
+    map.on('locationerror', function () {
+      alert('No se pudo obtener tu ubicación');
+    });
+  </script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+
+</body>
+</html>
